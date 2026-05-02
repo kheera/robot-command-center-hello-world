@@ -1,9 +1,13 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { helloService } from './helloService';
 
 describe('helloService', () => {
   beforeEach(() => {
-    global.fetch = vi.fn();
+    vi.stubGlobal('fetch', vi.fn());
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
   describe('fetchHelloMessage', () => {
@@ -18,7 +22,7 @@ describe('helloService', () => {
       const result = await helloService.fetchHelloMessage();
 
       expect(result).toEqual(mockResponse);
-      expect(global.fetch).toHaveBeenCalledWith('/api/hello');
+      expect(global.fetch).toHaveBeenCalledWith('/api/hello', { signal: undefined });
     });
 
     it('should throw error when fetch fails', async () => {

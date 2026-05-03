@@ -9,8 +9,6 @@ app.use(express.json());
 // Register feature routes
 app.use(helloWorldPrefix, helloWorldRouter);
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+app.listen(PORT);
 
 export default app;

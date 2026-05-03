@@ -1,9 +1,13 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { helloService } from './helloService';
 
 describe('helloService', () => {
   beforeEach(() => {
-    global.fetch = vi.fn();
+    vi.stubGlobal('fetch', vi.fn());
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
   describe('fetchHelloMessage', () => {

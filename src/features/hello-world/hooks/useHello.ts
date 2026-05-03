@@ -1,19 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { helloService } from '../services/helloService';
 
 export const useHello = () => {
   const [message, setMessage] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const hasFetchedRef = useRef(false);
 
   useEffect(() => {
-    // Prevent double-fetch in React.StrictMode (development)
-    if (hasFetchedRef.current) {
-      return;
-    }
-    hasFetchedRef.current = true;
-
     const abortController = new AbortController();
 
     const fetchMessage = async () => {
@@ -41,7 +34,9 @@ export const useHello = () => {
 
     fetchMessage();
 
-    // Cleanup function to abort the request if component unmounts
+    // Cleanup function to prevent state updates after unmount
+    // In React.StrictMode (dev), this will be called when the first mount is cleaned up,
+    // then the effect runs again with a new AbortController for the second mount
     return () => {
       abortController.abort();
     };
